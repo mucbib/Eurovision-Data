@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-jahre = [*range(2007, 2023)]
+jahre = [*range(2004, 2023)]
 if 2020 in jahre:
 	jahre.remove(2020)
 
@@ -42,10 +42,10 @@ for jahr in jahre:
 			bezeichnung = bezeichnung[0]
 			spalten.append(bezeichnung)
 			#print(spalten)
-		spalten[2] = 'SF-Draw'
+		spalten[2] = 'SF_Draw'
 		spalten[6] = 'Language'
-		spalten[7] = 'SF-Place'
-		spalten[8] = 'SF-Points'
+		spalten[7] = 'SF_Place'
+		spalten[8] = 'SF_Points'
 
 		#rows
 		rows = table.find_all('tr')
@@ -71,6 +71,12 @@ for jahr in jahre:
 			#print(zeilen)
 		neuedaten = pd.DataFrame(data=zeilen, columns=spalten)
 		escframe = escframe.append(neuedaten)
+
+#North Macedonia = Macedonia
+macedonia = escframe.loc[escframe['Country'] == 'North Macedonia']
+if macedonia.empty == False:
+	northmacedonia = escframe.Country == 'North Macedonia'
+	escframe.loc[northmacedonia,'Country'] = 'Macedonia'
 
 escframe.to_csv('eurotable_semi.csv')
 print(escframe.head(20))
