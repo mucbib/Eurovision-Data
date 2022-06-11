@@ -22,7 +22,8 @@ If you can't run the code, if the code is broken or if you just want to download
 
 # FUTURE PLANS FOR THIS REPOSITORY
 - include a fallback option in case scraping Wikipedia doesn't work correctly anymore.
+- make it more usable by including an option to enter start and end years via the command line, and executing only one main file
 - scrape more data, possibly data about the voting, host city, lyrics etc. possibly including data from eurovisionworld.com, Wikidata and/or other websites
 
 # LICENCE
-Feel free to use it: CC-NC-SA.
+See the LICENCE file.
