@@ -3,9 +3,10 @@ This folder contains ready-to-use data files in CSV format. Each file contains d
 ## CONTENTS
 eurotable_final_1956-2022.csv contains data about the finals from 1956 to 2022.
 
-eurotable_semi_2004-2022.csv contains data about the semifinals from 2004 (when they were introduced) to 2022.
+eurotable_semi_2004-2022.csv contains data about the semi-finals from 2004 (when they were introduced) to 2022.
 
-For each competing entry, these two tables give the running order, country, artist, song, language, place and points. The table on the semifinals give also the information in which semifinal the entry was performed (column "SF").
+For each competing entry, these two tables give the running order, country, artist, song, language, place and points. 
+The table on the semi-finals give also the information in which semi-final the entry was performed (column "SF"): value "1" or "2"; for the years 2004-2007, when only one semi-final took place, the value is "SF".
 
 totaldata_1956-2022.csv gives you all the data from the two previous tables combined.
 
