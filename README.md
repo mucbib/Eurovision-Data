@@ -10,7 +10,7 @@ jahre = [*range(1956, 2023)]
 
 For example, "jahre = [*range(2014,2022)] will give you the data for the contests between 2014 and 2021(!).
 
-For peculiarities on the data output, see the readme.txt file in the folder "data".
+For peculiarities on the data output, see the readme.md file in the folder "data".
 
 # HOW TO USE IT
 Download the files and save them in a folder. The code is written in Python.
