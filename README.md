@@ -3,8 +3,11 @@ This project aims to provide the possibility to get data about all the entries i
 
 # HOW IT WORKS
 Once a start year and end year defined, the scraper gets the HTML file of each Eurovision Song Contest's Wikipedia page, extracts data about all entries and saves them to CSV files.
+
 To define your own start and end year, go to the files "scrapingwikifinal.py" and "scrapingwikisemi.py" and change the line 5:
+
 jahre = [*range(1956, 2023)]
+
 For example, "jahre = [*range(2014,2022)] will give you the data for the contests between 2014 and 2021(!).
 
 # HOW TO USE IT
