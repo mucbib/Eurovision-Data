@@ -6,9 +6,9 @@ Once a start year and end year defined, the scraper gets the HTML file of each E
 
 To define your own start and end year, go to the files "scrapingwikifinal.py" and "scrapingwikisemi.py" and change the line 5:
 
-`jahre = [*range(1956, 2023)]`
+`years = [*range(1956, 2023)]`
 
-For example, `jahre = [*range(2014,2022)]` will give you the data for the contests between 2014 and 2021(!).
+For example, `years = [*range(2014,2022)]` will give you the data for the contests between 2014 and 2021(!).
 
 For peculiarities on the data output, see the readme.md file in the folder "data".
 
@@ -24,6 +24,7 @@ For combine the data from semi-finals and finals in one table, and have basicall
 
 # HELP! IT DOESN'T WORK
 If you can't run the code, if the code is broken or if you just want to download all Eurovision data as a CSV file without doing all this strange nerd stuff, go to the folder "data" and download `totaldata_1956-2022.csv`. You'll be happy.
+And, btw, if you spot any error/misfunction/ugly code, let me know !
 
 # FUTURE PLANS FOR THIS REPOSITORY
 - include a fallback option in case scraping Wikipedia doesn't work correctly anymore.
