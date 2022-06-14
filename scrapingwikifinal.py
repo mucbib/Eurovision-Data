@@ -2,17 +2,21 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-jahre = [*range(2019, 2021)]
-if 2020 in jahre:
-	jahre.remove(2020)
+print("Good evening Europe !\n")
+
+#defining the timeframe and removing 2020 from the list
+years = [*range(1956, 2023)]
+if 2020 in years:
+	years.remove(2020)
 
 escframe = pd.DataFrame()
 
-for jahr in jahre:
+for year in years:
 	
-	print("now scraping " + str(jahr) + "\n")
+	#Scraping the Wikipedia page for each ESC
+	print("now scraping " + str(year) + "\n")
 
-	wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(jahr)
+	wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(year)
 
 	source = requests.get(wikiurl)
 	content = source.content
@@ -20,58 +24,51 @@ for jahr in jahre:
 	text = source.text
 	soup = BeautifulSoup(text, 'lxml')
 	
-	if jahr < 1958:
+	#Locating the results table in the HTML file
+	if year < 2004:
 		spanid = 'Participants_and_results'
-	elif jahr > 2003:
-		spanid = 'Final'
 	else:
-		spanid = 'Results'
+		spanid = 'Final'
 	offset = soup.find('span', id=spanid)
 	if offset == None:
-		offset = soup.find('span', id='Participants_and_results')
+		offset = soup.find('span', id='Results')
 		if offset == None:
-			offset = soup.find('span', id='Results')
-			if offset == None:
-				print('Wikipedia-Abschnitt nicht gefunden.')
-	#print(offset)
+			print('Results table from Wikipedia not found. Damn !')
 	offset = offset.parent
 	table = offset.find_next_sibling('table')
 
-	#columns
-	columns = table.find_all('th', scope='col')
-	spalten = ['Year']
-	for bezeichnung in columns:
+	#Getting the columns
+	wikicolumns = table.find_all('th', scope='col')
+	columns = ['Year']
+	for bezeichnung in wikicolumns:
 		bezeichnung = bezeichnung.get_text().strip()
 		bezeichnung = bezeichnung.split('[')
 		bezeichnung = bezeichnung[0]
-		spalten.append(bezeichnung)
-		#print(spalten)
-	spalten[1] = 'Draw'
-	spalten[5] = 'Language'
+		columns.append(bezeichnung)
 
-	#rows
-	rows = table.find_all('tr')
-	del(rows[0])
-	zeilen = []
-	for row in rows:
+	#Getting the rows
+	wikirows = table.find_all('tr')
+	del(wikirows[0])
+	entryrows = []
+	for row in wikirows:
 		row1 = row.find_all('th', scope='row')
 		row2 = row.find_all('td')
 		row = row1 + row2
-		zeile = [jahr]
+		entryrow = [year]
 		for td in row:
 			td = td.text.strip()
 			td = td.split('[')
 			td = td[0]
 			if td[0] == '"':
 				td = td.replace('"', '')
-			zeile.append(td)
-		zeilen.append(zeile)
-		#print(zeilen)
-	neuedaten = pd.DataFrame(data=zeilen, columns=spalten)
-	escframe = pd.concat([escframe, neuedaten], ignore_index=True)
+			entryrow.append(td)
+		entryrows.append(entryrow)
+		#print(entryrows)
+	newdata = pd.DataFrame(data=entryrows, columns=columns)
+	escframe = pd.concat([escframe, newdata], ignore_index=True)
 
-#1956 bereinigen
-if 1956 in jahre:
+#Clean up 1956
+if 1956 in years:
 	reihen56 = escframe.Year == 1956
 	escframe.loc[reihen56,'Place'] = 0
 	escframe.loc[reihen56,'Points'] = -1
@@ -84,7 +81,7 @@ if macedonia.empty == False:
 	northmacedonia = escframe.Country == 'North Macedonia'
 	escframe.loc[northmacedonia,'Country'] = 'Macedonia'
 
-
-#abspeichern	
-#escframe.to_csv('eurotable_final.csv')
-print(escframe.head(30))
+#save
+escframe.to_csv('eurotable_final.csv')
+print("Done. Save your kisses for me.\n")
+print(escframe)
