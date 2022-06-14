@@ -2,17 +2,20 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-jahre = [*range(2004, 2023)]
-if 2020 in jahre:
-	jahre.remove(2020)
+#defining the timeframe and removing 2020 from the list
+years = [*range(2004, 2023)]
+if 2020 in years:
+	years.remove(2020)
 
 escframe = pd.DataFrame()
 
-for jahr in jahre:
+print("Europe, start scraping...now !\n")
+for year in years:
 	
-	print("now scraping semifinal(s) " + str(jahr) + "\n")
+	#Scraping the Wikipedia page
+	print("now scraping semifinal(s) " + str(year) + "\n")
 
-	wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(jahr)
+	wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(year)
 
 	source = requests.get(wikiurl)
 	content = source.content
@@ -20,7 +23,8 @@ for jahr in jahre:
 	text = source.text
 	soup = BeautifulSoup(text, 'lxml')
 	
-	if 2003 < jahr < 2008:
+	#Localising the tables for semi-final 1 and 2
+	if 2003 < year < 2008:
 		spanids = ['Semi-final']
 	else:
 		spanids = ['Semi-final_1', 'Semi-final_2']
@@ -28,49 +32,46 @@ for jahr in jahre:
 	
 		offset = soup.find('span', id=spanid)
 		if offset == None:
-			print('Wikipedia-Abschnitt nicht gefunden.')
-		#print(offset)
+			print('Relevant content not found on Wikipedia.')
 		offset = offset.parent
 		table = offset.find_next_sibling('table')
 
 		#columns
-		columns = table.find_all('th', scope='col')
-		spalten = ['Year', 'SF']
-		for bezeichnung in columns:
-			bezeichnung = bezeichnung.get_text().strip()
-			bezeichnung = bezeichnung.split('[')
-			bezeichnung = bezeichnung[0]
-			spalten.append(bezeichnung)
-			#print(spalten)
-		spalten[2] = 'SF_Draw'
-		spalten[6] = 'Language'
-		spalten[7] = 'SF_Place'
-		spalten[8] = 'SF_Points'
+		wikicolumns = table.find_all('th', scope='col')
+		columns = ['Year', 'SF']
+		for columnhead in wikicolumns:
+			columnhead = columnhead.get_text().strip()
+			columnhead = columnhead.split('[')
+			columnhead = columnhead[0]
+			columns.append(columnhead)
+		columns[2] = 'SF_Order'
+		columns[7] = 'SF_Place'
+		columns[8] = 'SF_Points'
 
 		#rows
-		rows = table.find_all('tr')
-		del(rows[0])
-		zeilen = []
-		for row in rows:
+		wikirows = table.find_all('tr')
+		del(wikirows[0])
+		entryrows = []
+		for row in wikirows:
 			row1 = row.find_all('th', scope='row')
 			row2 = row.find_all('td')
 			row = row1 + row2
-			if 2003 < jahr < 2008:
+			if 2003 < year < 2008:
 				SFvalue = 'SF'
 			else:
 				SFvalue = spanid[-1]
-			zeile = [jahr, SFvalue]
+			entryrow = [year, SFvalue]
 			for td in row:
 				td = td.text.strip()
 				td = td.split('[')
 				td = td[0]
 				if td[0] == '"':
 					td = td.replace('"', '')
-				zeile.append(td)
-			zeilen.append(zeile)
-			#print(zeilen)
-		neuedaten = pd.DataFrame(data=zeilen, columns=spalten)
-		escframe = escframe.append(neuedaten)
+				entryrow.append(td)
+			entryrows.append(entryrow)
+			#print(entryrows)
+		newdata = pd.DataFrame(data=entryrows, columns=columns)
+		escframe = escframe.append(newdata)
 
 #North Macedonia = Macedonia
 macedonia = escframe.loc[escframe['Country'] == 'North Macedonia']
@@ -78,8 +79,10 @@ if macedonia.empty == False:
 	northmacedonia = escframe.Country == 'North Macedonia'
 	escframe.loc[northmacedonia,'Country'] = 'Macedonia'
 
+#save
 escframe.to_csv('eurotable_semi.csv')
-print(escframe.head(20))
+print("Done. I'm in love with a fairytale.\n")
+print(escframe)
 
 	
 

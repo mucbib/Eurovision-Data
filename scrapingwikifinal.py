@@ -40,11 +40,11 @@ for year in years:
 	#Getting the columns
 	wikicolumns = table.find_all('th', scope='col')
 	columns = ['Year']
-	for bezeichnung in wikicolumns:
-		bezeichnung = bezeichnung.get_text().strip()
-		bezeichnung = bezeichnung.split('[')
-		bezeichnung = bezeichnung[0]
-		columns.append(bezeichnung)
+	for columnhead in wikicolumns:
+		columnhead = columnhead.get_text().strip()
+		columnhead = columnhead.split('[')
+		columnhead = columnhead[0]
+		columns.append(columnhead)
 
 	#Getting the rows
 	wikirows = table.find_all('tr')
