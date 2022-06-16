@@ -12,7 +12,7 @@ totaldata_1956-2022.csv gives you all the data from the two previous tables comb
 
 ## PECULARITIES
 On the data for 1956:
-There were no points awarded, and the places of the entries have never been revealed, except for the winner. All entries for 1956 have therefore "-1" as value in the column "Points" (that is to be able to distinguish them from real Nulpointers). All entries, except "Refrain", have the value "0" in the column "Place".
+There were no points awarded, and the places of the entries have never been revealed, except for the winner. All entries for 1956 have therefore "-1" as value in the column "Points" (that is in order to distinguish them from real Nulpointers). All entries, except "Refrain", have the value "0" in the column "Place".
 
 On 2020:
 Due to Covid-19, the Eurovisiong Song Contest did not take place in 2020, therefore data from this year is not included here.
