@@ -2,7 +2,7 @@
 This project aims to provide the possibility to get data about all the entries in the history of the Eurovision Song Contest, by using a web scraper that lets you download and extract relevant data from the Wikipedia articles on each Eurovision Song Contest.
 
 # HOW IT WORKS
-Once a start year and end year defined, the scraper gets the HTML file of each Eurovision Song Contest's Wikipedia page, extracts data about all entries and saves them to CSV files.
+Once a start year and end year defined, the scraper gets the HTML file of each Eurovision Song Contest's Wikipedia page, extracts data about all entries and saves them to CSV files in the directory "data".
 
 To define your own start and end year, go to the files "scrapingwikifinal.py" and "scrapingwikisemi.py" and change the line 5:
 
@@ -27,7 +27,6 @@ If you can't run the code, if the code is broken or if you just want to download
 And, btw, if you spot any error/misfunction/ugly code, let me know !
 
 # FUTURE PLANS FOR THIS REPOSITORY
-- include a fallback option in case scraping Wikipedia doesn't work correctly anymore.
 - make it more usable by including an option to enter start and end years via the command line, and executing only one main file
 - scrape more data, possibly data about the voting, host city, lyrics etc. possibly including data from eurovisionworld.com, Wikidata and/or other websites
 
