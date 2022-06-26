@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import ff_eurofunctions as eurof
 
 print("Good evening Europe !\n")
 
@@ -17,23 +18,16 @@ for year in years:
 	print("now scraping " + str(year) + "\n")
 
 	wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(year)
-
-	source = requests.get(wikiurl)
-	content = source.content
-
-	text = source.text
-	soup = BeautifulSoup(text, 'lxml')
 	
-	#Locating the results table in the HTML file
-	if year < 2004:
-		spanid = 'Participants_and_results'
-	else:
-		spanid = 'Final'
-	offset = soup.find('span', id=spanid)
+	offset = eurof.get_offset_final(wikiurl, year)
+	
 	if offset == None:
-		offset = soup.find('span', id='Results')
-		if offset == None:
-			print('Results table from Wikipedia not found. Damn !')
+		oldid = eurof.fallbackfinal(year)
+		offset = eurof.get_offset_final(oldid, year)
+	
+	if offset == None:
+		print("Fallback solution not successful. Why me ?")
+	
 	offset = offset.parent
 	table = offset.find_next_sibling('table')
 
@@ -82,6 +76,6 @@ if macedonia.empty == False:
 	escframe.loc[northmacedonia,'Country'] = 'Macedonia'
 
 #save
-escframe.to_csv('eurotable_final.csv')
+escframe.to_csv('data/eurotable_final.csv')
 print("Done. Save your kisses for me.\n")
 print(escframe)
