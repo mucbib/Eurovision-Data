@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import ff_eurofunctions as eurof
 
 #defining the timeframe and removing 2020 from the list
 years = [*range(2004, 2023)]
@@ -17,30 +18,29 @@ for year in years:
 
 	wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(year)
 
-	source = requests.get(wikiurl)
-	content = source.content
-
-	text = source.text
-	soup = BeautifulSoup(text, 'lxml')
+	spanids, soup = eurof.get_spanids_semi(wikiurl, year)
 	
-	#Localising the tables for semi-final 1 and 2
-	if 2003 < year < 2008:
-		spanids = ['Semi-final']
-	else:
-		spanids = ['Semi-final_1', 'Semi-final_2']
 	for spanid in spanids:
-	
+		
 		offset = soup.find('span', id=spanid)
 		if offset == None:
-			print('Relevant content not found on Wikipedia.')
+			print('Relevant content not found on Wikipedia. Try back-up solution.\n')
+			index = spanids.index(spanid)
+			wikiurl = eurof.fallbackfinal(year)
+			spanids, soup = eurof.get_spanids_semi(wikiurl, year)
+			spanid = spanids[index]
+			offset = soup.find('span', id=spanid)
+		
 		offset = offset.parent
 		table = offset.find_next_sibling('table')
 
 		#columns
 		wikicolumns = table.find_all('th', scope='col')
 		columns = ['Year', 'SF']
+		
 		for columnhead in wikicolumns:
 			columnhead = columnhead.get_text().strip()
+			#remove annotations
 			columnhead = columnhead.split('[')
 			columnhead = columnhead[0]
 			columns.append(columnhead)
@@ -80,7 +80,7 @@ if macedonia.empty == False:
 	escframe.loc[northmacedonia,'Country'] = 'Macedonia'
 
 #save
-escframe.to_csv('eurotable_semi.csv')
+escframe.to_csv('data/eurotable_semi.csv')
 print("Done. I'm in love with a fairytale.\n")
 print(escframe)
 
