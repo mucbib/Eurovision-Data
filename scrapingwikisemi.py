@@ -2,11 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import ff_eurofunctions as eurof
-
-#defining the timeframe and removing 2020 from the list
-years = [*range(2004, 2023)]
-if 2020 in years:
-	years.remove(2020)
+	
+#defining the timeframe (user interaction)
+years = eurof.define_years("semi")
 
 escframe = pd.DataFrame()
 
