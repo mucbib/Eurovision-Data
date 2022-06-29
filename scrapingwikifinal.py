@@ -5,10 +5,8 @@ import ff_eurofunctions as eurof
 
 print("Good evening Europe !\n")
 
-#defining the timeframe and removing 2020 from the list
-years = [*range(1956, 2023)]
-if 2020 in years:
-	years.remove(2020)
+#defining the timeframe (user interaction)
+years = eurof.define_years("final")
 
 escframe = pd.DataFrame()
 
