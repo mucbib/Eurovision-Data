@@ -15,7 +15,9 @@ REQUIREMENTS to be installed before you run the files: Python (obviously), and t
 pandas, requests, bs4
 
 Then go to your command line/terminal, navigate to the folder where you saved the files, and run `python3 scrapingwikifinal.py`. The program will ask you to set a start and end year. If you enter 1956 and 2022 as start and end years, for example, the program will get the data for the contests from 1956 to 2003, plus the finals from 2004-2022, and save them in "eurotable_final.csv" in the folder "data".
-For the data on the semi-finals, run `python3 scrapingwikisemi.py`. Note that the earliest possible start year is 2004 for the semi-finals but as a true Eurovision fan you should know that anyway :-P. Data from the semi-finals will be saved in "eurotable_semi.csv"
+
+For the data on the semi-finals, run `python3 scrapingwikisemi.py`. Note that the earliest possible start year is 2004 for the semi-finals but as a true Eurovision fan you should know that anyway :-P. Data from the semi-finals will be saved in "eurotable_semi.csv".
+
 In order to combine the data from semi-finals and finals in one table, and have basically ALL entries of Eurovision history, finally run `python3 merging.py` after having run the two scraping files. The results will be saved in "totaldata.csv".
 
 # HELP! IT DOESN'T WORK
