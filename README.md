@@ -12,7 +12,7 @@ For peculiarities on the data output, see the readme.md file in the folder "data
 Download the files and save them in a folder. The code is written in Python.
 
 REQUIREMENTS to be installed before you run the files: Python (obviously), and the following Python modules: 
-pandas, requests, bs4, datetime.
+pandas, requests, bs4.
 
 Then go to your command line/terminal, navigate to the folder where you saved the files, and run `python3 scrapingwikifinal.py`. The program will ask you to set a start and end year. If you enter 1956 and 2022 as start and end years, for example, the program will get the data for the contests from 1956 to 2003, plus the finals from 2004-2022, and save them in "eurotable_final.csv" in the folder "data".
 
