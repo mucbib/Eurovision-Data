@@ -26,7 +26,8 @@ If you can't run the code, if the code is broken or if you just want to download
 And, btw, if you spot any error/misfunction/ugly code, let me know !
 
 # FUTURE PLANS FOR THIS REPOSITORY
-- scrape more data, possibly data about the voting, host city, lyrics etc. possibly including data from eurovisionworld.com, Wikidata and/or other websites
+- avoid end year errors (in case it's 2023 but the contest has not yet taken place)
+- scrape more data, possibly data about the voting (scoreboard), host city, lyrics etc. possibly including data from eurovisionworld.com, Wikidata and/or other websites
 
 # LICENCE
 See the LICENCE file.
