@@ -97,11 +97,11 @@ def scrapingwikifinal(allshows):
 	print("Data was saved in data/eurotable_final.csv\n")
 	print("Done. Save your kisses for me.\n")
 
-def scrapingwikisemi(all=False):
+def scrapingwikisemi(allshows):
 	
 	#defining the timeframe (user interaction)	
 	yeartoday = datetime.date.today().year
-	if all == True:
+	if allshows == True:
 		years = [*range(2004, yeartoday+1)]
 		if 2020 in years:
 			years.remove(2020)
