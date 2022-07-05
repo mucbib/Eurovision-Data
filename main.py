@@ -19,9 +19,9 @@ answer = input("yes/no: ").strip().lower()
 
 #if yes: scrape everything
 if answer == 'yes' or answer == 'y':
-	eurof.scrapingwikifinal(all=True)
+	eurof.scrapingwikifinal(True)
 	time.sleep(1)
-	eurof.scrapingwikisemi(all=True)
+	eurof.scrapingwikisemi(True)
 	time.sleep(1)
 	eurof.merging()	
 else:
@@ -39,7 +39,7 @@ else:
 	print("Step 2: Do you want to get data for semi-finals ? (enter 'yes')")
 	answersemi = input("yes/no: ").strip().lower()
 	if answersemi == 'yes' or answersemi == 'y':
-		eurof.scrapingwikisemi()
+		eurof.scrapingwikisemi(False)
 		both = both + 1
 	time.sleep(1)
 
