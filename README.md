@@ -11,8 +11,8 @@ For peculiarities on the data output, see the readme.md file in the folder "data
 # HOW TO USE IT
 Download the files and save them in a folder. The code is written in Python.
 
-REQUIREMENTS to be installed before you run the files: Python (obviously), and the following Python modules: 
-pandas, requests, bs4, lxml.
+REQUIREMENTS to be installed before you run the files: Python 3, and the following Python modules: 
+pandas, requests, bs4, lxml, dateutil. Make also sure the device where you run the program has a stable internet connection.
 
 Then go to your command line/terminal, navigate to the folder where you saved the files, and run `python3 main.py`:
 - The program will ask you if you want to download all available data (option 1). If you answer by typing "yes", all data will be scraped and saved in `data/totaldata.csv`. The simplest and most convenient way to get ALL data without much fuss.
