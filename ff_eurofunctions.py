@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import datetime
+import dateutil
 
 #FUNCTIONS:
 #1. scrapingwikifinal (scrapes Wikipedia data for the finals)
@@ -11,6 +12,7 @@ import datetime
 #5. get_offset_final (find the section in Wikipedia (finals))
 #6. get_spanids_semi (find the sections in Wikipedia (semi-finals))
 #7. fallbackfinal (get Wikipedia oldid (old URL) when section can't be located)
+#8. endyear (determines in which year the latest Eurovision Song Contest took place)
 
 def scrapingwikifinal(allshows):
 	print("Good evening Europe !\n")
@@ -30,11 +32,17 @@ def scrapingwikifinal(allshows):
 		
 		#Scraping the Wikipedia page for each ESC
 		print("now scraping " + str(year) + "\n")
-
+		
+		if year == yeartoday:
+			maxyear = endyear()
+			if maxyear != yeartoday:
+				print("Contest has not yet taken place.")
+				break
+		
 		wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(year)
 		
 		offset = get_offset_final(wikiurl, year)
-		
+        
 		if offset == None:
 			oldid = fallbackfinal(year)
 			offset = get_offset_final(oldid, year)
@@ -54,7 +62,7 @@ def scrapingwikifinal(allshows):
 			columnhead = columnhead.split('[')
 			columnhead = columnhead[0]
 			columns.append(columnhead)
-
+			
 		#Getting the rows
 		wikirows = table.find_all('tr')
 		del(wikirows[0])
@@ -116,8 +124,14 @@ def scrapingwikisemi(allshows):
 		#Scraping the Wikipedia page
 		print("now scraping semifinal(s) " + str(year) + "\n")
 
-		wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(year)
+		if year == yeartoday:
+			maxyear = endyear()
+			if maxyear != yeartoday:
+				print("Contest has not yet taken place.")
+				break
 
+		wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(year)
+		
 		spanids, soup = get_spanids_semi(wikiurl, year)
 		
 		for spanid in spanids:
@@ -130,7 +144,7 @@ def scrapingwikisemi(allshows):
 				spanids, soup = get_spanids_semi(wikiurl, year)
 				spanid = spanids[index]
 				offset = soup.find('span', id=spanid)
-			
+				
 			if offset == None:
 				print("Fallback solution not successful. Why me ?")
 				continue
@@ -334,3 +348,35 @@ def fallbackfinal(year):
 	#read the oldid-URL and return it
 	oldid = fb_array[year]['oldid']
 	return oldid
+
+#Find out what the latest ESC was and take that as the latest possible endpoint
+def endyear():
+	yeartoday = datetime.date.today().year +1
+	datetoday = datetime.date.today()
+	
+	#take the Wikipedia page of the ESC which is this year
+	wikiurl = 'https://en.wikipedia.org/wiki/Eurovision_Song_Contest_' + str(yeartoday)
+	source = requests.get(wikiurl)
+	content = source.content
+
+	text = source.text
+	soup = BeautifulSoup(text, 'lxml')
+	
+	#get the infobox and the content of the field "Final"
+	offset = soup.find('th', class_='infobox-label', text='Final')
+	infobox = offset.find_next_sibling('td', class_='infobox-data')
+	finaldate = infobox.text
+	
+	#parse that text content as a date
+	try:
+		finaldate = dateutil.parser.parse(finaldate)
+	except ValueError: 
+		#if parsing fails, assume the contest has not yet taken place (otherwise there should be a date)
+		maxyear = yeartoday - 1
+	else:
+		finaldate = datetime.datetime.date(finaldate)
+		if datetoday > finaldate: #if date of the ESC in the past: take this year as latest ESC year
+			maxyear = yeartoday
+		else:
+			maxyear = yeartoday - 1 #else: assume the latest ESC was last year
+	return maxyear
