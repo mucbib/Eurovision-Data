@@ -305,8 +305,9 @@ def define_years(modus):
 
 #Find section in Wikipedia (finals)
 def get_offset_final(wikiurl, year):
-
-	source = requests.get(wikiurl)
+	headers = { "User-Agent": "Eurovision Data (originally from https://github.com/mucbib/Eurovision-Data)"
+	}
+	source = requests.get(wikiurl, headers=headers)
 	content = source.content
 
 	text = source.text
@@ -323,7 +324,9 @@ def get_offset_final(wikiurl, year):
 
 #Find section in Wikipedia (semi-finals)
 def get_spanids_semi(wikiurl, year):
-	source = requests.get(wikiurl)
+	headers = { "User-Agent": "Eurovision Data (originally from https://github.com/mucbib/Eurovision-Data)"
+	}
+	source = requests.get(wikiurl, headers=headers)
 	content = source.content
 
 	text = source.text
