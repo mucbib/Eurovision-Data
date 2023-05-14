@@ -22,7 +22,7 @@ Then go to your command line/terminal, navigate to the folder where you saved th
 You can also scrape data individually and more manually by running separately the files `python3 scrapingwikifinal.py`, `python3 scrapingwikisemi.py` and finally `python3 merging.py`.
 
 # HELP! IT DOESN'T WORK
-If you can't run the code, if the code is broken or if you just want to download all Eurovision data as a CSV file without doing all this strange nerd stuff, go to the folder "data" and download `totaldata_1956-2022.csv`. You'll be happy.
+If you can't run the code, if the code is broken or if you just want to download all Eurovision data as a CSV file without doing all this strange nerd stuff, go to the folder "data" and download `totaldata_1956-2023.csv`. You'll be happy.
 And, btw, if you spot any error/misfunction/ugly code, let me know !
 
 # FUTURE PLANS FOR THIS REPOSITORY
