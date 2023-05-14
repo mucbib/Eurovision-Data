@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import datetime
 import dateutil
+import re
 
 #FUNCTIONS:
 #1. scrapingwikifinal (scrapes Wikipedia data for the finals)
@@ -62,6 +63,7 @@ def scrapingwikifinal(allshows):
 			columnhead = columnhead.split('[')
 			columnhead = columnhead[0]
 			columns.append(columnhead)
+		columns[5] = 'Language'
 			
 		#Getting the rows
 		wikirows = table.find_all('tr')
@@ -88,7 +90,7 @@ def scrapingwikifinal(allshows):
 	if 1956 in years:
 		reihen56 = escframe.Year == 1956
 		escframe.loc[reihen56,'Place'] = 0
-		escframe.loc[reihen56,'Points'] = -1
+		escframe.loc[reihen56,'Points'] = 0
 		refrain = escframe.loc[(escframe['Year'] == 1956) & (escframe['Song'] == 'Refrain')]
 		escframe.loc[refrain.index[0], 'Place'] = 1
 
@@ -97,6 +99,10 @@ def scrapingwikifinal(allshows):
 	if macedonia.empty == False:
 		northmacedonia = escframe.Country == 'North Macedonia'
 		escframe.loc[northmacedonia,'Country'] = 'Macedonia'
+
+	#Cleaning up R/O, Points and Place
+	for column in ['R/O', 'Points', 'Place']:
+		escframe[column] = escframe[column].apply(clean_up_integer).astype(pd.Int64Dtype())
 
 	#save
 	escframe.to_csv('data/eurotable_final.csv')
@@ -163,8 +169,10 @@ def scrapingwikisemi(allshows):
 				columnhead = columnhead[0]
 				columns.append(columnhead)
 			columns[2] = 'SF_Order'
-			columns[7] = 'SF_Place'
-			columns[8] = 'SF_Points'
+			columns[6] = 'Language'
+			columns[7] = 'SF_Points'
+			columns[8] = 'SF_Place'
+
 
 			#rows
 			wikirows = table.find_all('tr')
@@ -197,6 +205,10 @@ def scrapingwikisemi(allshows):
 		northmacedonia = escframe.Country == 'North Macedonia'
 		escframe.loc[northmacedonia,'Country'] = 'Macedonia'
 
+	#Cleaning up R/O, Points and Place
+	for column in ['SF_Order', 'SF_Points', 'SF_Place']:
+		escframe[column] = escframe[column].apply(clean_up_integer).astype(pd.Int64Dtype())
+
 	#save
 	escframe.to_csv('data/eurotable_semi.csv')
 
@@ -204,13 +216,21 @@ def scrapingwikisemi(allshows):
 	print("Data was saved in data/eurotable_semi.csv\n")
 	print("Done. I'm in love with a fairytale.\n")
 
+#Cleaning up numeric columns
+def clean_up_integer(x):
+	if x is None:
+		return None
+	return int(re.sub('[^0-9]','', str(x)))
+	
+
+
 #merging data from final and semi-finals
 def merging():
 	print("Merging all data...\n")
 
 	#load and prepare the tables
 	finaldata = pd.read_csv('data/eurotable_final.csv')
-	finaldata['Order'] = finaldata.Order.astype('Int64')
+	finaldata['R/O'] = finaldata['R/O'].astype('Int64')
 	finaldata['Place'] = finaldata.Place.astype('Int64')
 	finaldata['Points'] = finaldata.Points.astype('Int64')
 	finaldata = finaldata.drop(labels="Unnamed: 0", axis=1)
@@ -232,14 +252,15 @@ def merging():
 	duplicates2 = totaldata[totaldata.duplicated(duplicate_subset)]
 	##merging the duplicate frames in one, dropping the Language-column in semifinals (duplicates2)
 	duplicates1 = duplicates1.drop(['SF', 'SF_Order', 'SF_Points', 'SF_Place'], axis=1)
-	duplicates2 = duplicates2.drop(['Language', 'Order', 'Place', 'Points'], axis=1)
+	duplicates2 = duplicates2.drop(['Language', 'R/O', 'Place', 'Points'], axis=1)
 	duplicatestotal = duplicates1.merge(duplicates2, how='outer', on=['Year', 'Country', 'Song', 'Artist'])
 	#merging the cleaned-up rows everything with the big table and deduplicating, keeping the cleaned-up rows
 	totaldata = totaldata.append(duplicatestotal)
 	totaldata = totaldata.drop_duplicates(subset=duplicate_subset, keep='last')
 	#making everything nice and tidy again
-	totaldata = totaldata.sort_values(['Year', 'Order', 'SF', 'SF_Order'])
+	totaldata = totaldata.sort_values(['Year', 'R/O', 'SF', 'SF_Order'])
 
+	totaldata['R/O'] = totaldata['R/O'].astype('Int64')
 
 	#save to CSV
 	totaldata.to_csv('data/totaldata.csv')

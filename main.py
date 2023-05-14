@@ -8,7 +8,7 @@ time.sleep(3)
 print("Welcome to mucbib Eurovision-Data, a web scraper which lets you download and save data from the Eurovision Song Contest.\n")
 print("This program is licensed under MIT. See https://github.com/mucbib/Eurovision-Data for more information.\n")
 time.sleep(5)
-cities = ['London', 'Turin', 'Tel Aviv', 'Rotterdam', 'Lisbon', 'Kyiv', 'Stockholm', 'Vienna', 'Dublin', 'Copenhagen', 'Belgrade', 'Baku']
+cities = ['Turin', 'Tel Aviv', 'Rotterdam', 'Lisbon', 'Kyiv', 'Stockholm', 'Vienna', 'Dublin', 'Copenhagen', 'Belgrade', 'Baku', 'Liverpool']
 randomcity = random.choice(cities)
 print(f"Okay, {randomcity}, are you ready ?\n")
 time.sleep(2)
