@@ -375,7 +375,7 @@ def fallbackfinal(year):
 
 #Find out what the latest ESC was and take that as the latest possible endpoint
 def endyear():
-	yeartoday = datetime.date.today().year +1
+	yeartoday = datetime.date.today().year
 	datetoday = datetime.date.today()
 	
 	#take the Wikipedia page of the ESC which is this year
